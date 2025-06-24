@@ -89,9 +89,13 @@ function App() {
       {/* Politicians Cards */}
       <div className="container">
         <div className="row row-cols-3 gy-4">
-          {filteredPoliticians.map(item => (
-            <Card key={item.id} p={item} />
-          ))}
+          {filteredPoliticians.length === 0 ? (
+            <h2 className='text-center'>No results ...</h2>
+          ) : (
+            filteredPoliticians.map(item => (
+              <Card key={item.id} p={item} />
+            ))
+          )}
         </div>
       </div>
     </>
