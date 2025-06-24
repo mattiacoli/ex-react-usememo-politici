@@ -26,23 +26,30 @@ function App() {
   const [query, setQuery] = useState('')
   const [selectedPostition, setSelectedPosition] = useState('')
 
-
-  const filteredPoliticians = useMemo(() => {
-    return politics.filter(p => p.name?.toLowerCase().includes(query.toLowerCase()) ||
-      p.biography?.toLowerCase().includes(query.toLowerCase()))
-  }, [politics, query])
-
   useEffect(() => {
     fetch(`http://localhost:3333/politicians`)
       .then(res => res.json())
       .then(data => setPolitics(data))
   }, [])
 
+  const filteredPoliticians = useMemo(() => {
+    const userQuery = query.toLowerCase()
+    const userSelect = selectedPostition.toLowerCase()
+
+    return politics.filter(p => {
+      const matchesSearch = p.name?.toLowerCase().includes(userQuery) ||
+        p.biography?.toLowerCase().includes(userQuery)
+      const matchesPosition = !userSelect || p.position.toLowerCase() === userSelect
+
+      return matchesSearch && matchesPosition
+    })
+
+  }, [politics, query, selectedPostition])
+
+
   const positions = politics.reduce((acc, p) =>
     acc.includes(p.position) ? acc : ([...acc, p.position])
     , [])
-
-  console.log(positions);
 
 
   return (
@@ -65,14 +72,14 @@ function App() {
         <div className="select w-50">
           <div className="form-group">
             <label htmlFor=""></label>
-            <select className="form-control p-2" name="" id="">
-              <option value=" ">Select a position ...</option>
+            <select
+              className="form-control p-2"
+              value={selectedPostition}
+              onChange={(e) => setSelectedPosition(e.target.value)}
+            >
+              <option value="">All Position</option>
               {positions.map((o, i) =>
-                <option
-                  key={i}
-                  value={selectedPostition}
-                  onChange={(e) => setSelectedPosition(e.target.value)}
-                >{o}</option>)}
+                <option key={i} value={o}>{o}</option>)}
             </select>
           </div>
 
