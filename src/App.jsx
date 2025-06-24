@@ -2,7 +2,7 @@ import { useEffect, useState, useMemo, memo } from 'react'
 
 const Card = memo(({ p }) => {
 
-  console.log('componente renderizzato', p.name);
+  // console.log('componente renderizzato', p.name);
 
   return (
     <div className="col">
@@ -24,6 +24,7 @@ function App() {
 
   const [politics, setPolitics] = useState([])
   const [query, setQuery] = useState('')
+  const [selectedPostition, setSelectedPosition] = useState('')
 
 
   const filteredPoliticians = useMemo(() => {
@@ -37,21 +38,44 @@ function App() {
       .then(data => setPolitics(data))
   }, [])
 
+  const positions = politics.reduce((acc, p) =>
+    acc.includes(p.position) ? acc : ([...acc, p.position])
+    , [])
+
+  console.log(positions);
+
 
   return (
     <>
       <h1 className='text-center m-4 fw-bolder'>Politicians List </h1>
+      <div className="container d-flex gap-1">
 
-      {/* Searchbar */}
-      <div className="container">
-        <div className="searchbar text-center my-4 w-100">
+        {/* Searchbar */}
+        <div className="searchbar text-center my-4 w-50">
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder='Cosa stai cercando...'
-            className='p-2 w-100'
+            className='form-control p-2 w-100'
           />
+        </div>
+
+        {/* Select */}
+        <div className="select w-50">
+          <div className="form-group">
+            <label htmlFor=""></label>
+            <select className="form-control p-2" name="" id="">
+              <option value=" ">Select a position ...</option>
+              {positions.map((o, i) =>
+                <option
+                  key={i}
+                  value={selectedPostition}
+                  onChange={(e) => setSelectedPosition(e.target.value)}
+                >{o}</option>)}
+            </select>
+          </div>
+
         </div>
       </div>
 
