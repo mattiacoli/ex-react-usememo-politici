@@ -73,7 +73,7 @@ function App() {
           <div className="form-group">
             <label htmlFor=""></label>
             <select
-              className="form-control p-2"
+              className="form-select p-2"
               value={selectedPostition}
               onChange={(e) => setSelectedPosition(e.target.value)}
             >
